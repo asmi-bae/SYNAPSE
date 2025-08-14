@@ -1,0 +1,36 @@
+{
+  "name": "synapse",
+  "scripts": {
+    "dev": "pnpm run --parallel dev:gui dev:core dev:vscode dev:docs",
+    "dev:gui": "cd gui && pnpm run dev",
+    "dev:core": "cd core && pnpm run dev",
+    "dev:vscode": "cd extensions/vscode && pnpm run esbuild-watch",
+    "dev:docs": "cd docs && pnpm run start",
+    "build": "pnpm run --recursive build",
+    "build:gui": "cd gui && pnpm run build",
+    "build:core": "cd core && pnpm run build",
+    "build:vscode": "cd extensions/vscode && pnpm run esbuild",
+    "build:docs": "cd docs && pnpm run build",
+    "test": "pnpm run --recursive test",
+    "lint": "pnpm run --recursive lint",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\" --ignore-path .gitignore --ignore-path .prettierignore",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\" --ignore-path .gitignore --ignore-path .prettierignore",
+    "clean": "pnpm run --recursive clean",
+    "tsc:watch": "pnpm run --parallel tsc:watch:gui tsc:watch:vscode tsc:watch:core tsc:watch:binary",
+    "tsc:watch:gui": "cd gui && pnpm run tsc:watch",
+    "tsc:watch:vscode": "cd extensions/vscode && pnpm run tsc-watch",
+    "tsc:watch:core": "cd core && pnpm run tsc:watch",
+    "tsc:watch:binary": "cd binary && pnpm run tsc:watch",
+    "docker:dev": "docker-compose -f docker/docker-compose.dev.yml up --build",
+    "docker:build": "docker build -t synapse -f docker/Dockerfile .",
+    "docker:run": "docker run -p 3000:3000 -p 3001:3001 -p 3002:3002 synapse"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^7.8.0",
+    "concurrently": "^9.1.2",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "typescript": "^5.6.3"
+  }
+}

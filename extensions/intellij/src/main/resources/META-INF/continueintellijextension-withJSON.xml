@@ -1,0 +1,10 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="JavaScript.JsonSchema">
+        <ProviderFactory
+                implementation="com.github.continuedev.continueintellijextension.synapse.ConfigJsonSchemaProviderFactory"/>
+    </extensions>
+    <extensions defaultExtensionNs="JavaScript.JsonSchema">
+        <ProviderFactory
+                implementation="com.github.continuedev.continueintellijextension.synapse.ConfigRcJsonSchemaProviderFactory"/>
+    </extensions>
+</idea-plugin>

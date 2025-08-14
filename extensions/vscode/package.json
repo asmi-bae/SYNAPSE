@@ -1,0 +1,798 @@
+{
+  "name": "synapse",
+  "icon": "media/icon.png",
+  "author": "Synapse Dev, Inc",
+  "version": "1.1.76",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/synapsedev/synapse"
+  },
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "bugs": {
+    "url": "https://github.com/synapsedev/synapse/issues",
+    "email": "nate@synapse.dev"
+  },
+  "homepage": "https://synapse.dev",
+  "qna": "https://github.com/synapsedev/synapse/issues/new/choose",
+  "license": "Apache-2.0",
+  "displayName": "Synapse - open-source AI code assistant",
+  "pricing": "Free",
+  "description": "The leading open-source AI code assistant",
+  "publisher": "Synapse",
+  "engines": {
+    "vscode": "^1.70.0",
+    "node": ">=20.19.0"
+  },
+  "engine-strict": true,
+  "galleryBanner": {
+    "color": "#1E1E1E",
+    "theme": "dark"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Programming Languages",
+    "Education",
+    "Machine Learning",
+    "Snippets"
+  ],
+  "keywords": [
+    "chatgpt",
+    "cline",
+    "roo",
+    "github",
+    "copilot",
+    "claude",
+    "mistral",
+    "codestral",
+    "ai"
+  ],
+  "activationEvents": [
+    "onUri",
+    "onStartupFinished",
+    "onView:synapseGUIView"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "filenames": [
+          "config.json",
+          ".synapserc.json"
+        ],
+        "id": "jsonc"
+      },
+      {
+        "id": "promptLanguage",
+        "extensions": [
+          ".prompt"
+        ],
+        "aliases": [
+          "Prompt Language"
+        ],
+        "configuration": "./prompt-file-language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "promptLanguage",
+        "scopeName": "source.prompt",
+        "path": "./media/prompt.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "Synapse",
+      "properties": {
+        "synapse.telemetryEnabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Synapse collects anonymous usage data, cleaned of PII, to help us improve the product for our users. Read more  at [synapse.dev › Telemetry](https://docs.synapse.dev/telemetry)."
+        },
+        "synapse.showInlineTip": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline suggestion to use the Synapse keyboard shortcuts (e.g. \"Cmd/Ctrl L to select code, Cmd/Ctrl I to edit\")."
+        },
+        "synapse.disableQuickFix": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable the quick fix feature."
+        },
+        "synapse.enableQuickActions": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Enable the experimental Quick Actions feature. Read our walkthrough to learn about configuration and how to share feedback: [synapse.dev › Walkthrough: Quick Actions (experimental)](https://docs.synapse.dev/customize/deep-dives/vscode-actions#quick-actions)"
+        },
+        "synapse.enableTabAutocomplete": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Enable Synapse's tab autocomplete feature. Read our walkthrough to learn about configuration and how to share feedback: [synapse.dev › Walkthrough: Tab Autocomplete (beta)](https://docs.synapse.dev/features/tab-autocomplete)"
+        },
+        "synapse.pauseTabAutocompleteOnBattery": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Pause Synapse's tab autocomplete feature when your battery is low."
+        },
+        "synapse.pauseCodebaseIndexOnStart": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Pause Synapse's codebase index on start."
+        },
+        "synapse.enableConsole": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Enable a console to log and explore model inputs and outputs. It can be found in the bottom panel."
+        },
+        "synapse.remoteConfigServerUrl": {
+          "type": "string",
+          "default": null,
+          "markdownDescription": "If your team is set up to use shared configuration, enter the server URL here and your user token below to enable automatic syncing."
+        },
+        "synapse.userToken": {
+          "type": "string",
+          "default": null,
+          "markdownDescription": "If your team is set up to use shared configuration, enter your user token here and your server URL above to enable automatic syncing."
+        },
+        "synapse.remoteConfigSyncPeriod": {
+          "type": "number",
+          "default": 60,
+          "description": "The period of time in minutes between automatic syncs."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "synapse.applyCodeFromChat",
+        "category": "Synapse",
+        "title": "Apply code from chat",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.acceptDiff",
+        "category": "Synapse",
+        "title": "Accept Diff",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.rejectDiff",
+        "category": "Synapse",
+        "title": "Reject Diff",
+        "group": "Synapse",
+        "icon": "$(stop)"
+      },
+      {
+        "command": "synapse.acceptVerticalDiffBlock",
+        "category": "Synapse",
+        "title": "Accept Vertical Diff Block",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.rejectVerticalDiffBlock",
+        "category": "Synapse",
+        "title": "Reject Vertical Diff Block",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.focusEdit",
+        "category": "Synapse",
+        "title": "Edit Highlighted Code",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.focusSynapseInput",
+        "category": "Synapse",
+        "title": "Add Highlighted Code to Context and Clear Chat",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.focusSynapseInputWithoutClear",
+        "category": "Synapse",
+        "title": "Add Highlighted Code to Context",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.debugTerminal",
+        "category": "Synapse",
+        "title": "Debug Terminal",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.exitEditMode",
+        "category": "Synapse",
+        "title": "Exit Edit Mode",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.toggleFullScreen",
+        "category": "Synapse",
+        "title": "Open in new window",
+        "icon": "$(link-external)",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.openConfigPage",
+        "category": "Synapse",
+        "title": "Open Settings",
+        "icon": "$(gear)",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.toggleTabAutocompleteEnabled",
+        "category": "Synapse",
+        "title": "Toggle Autocomplete Enabled",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.forceAutocomplete",
+        "title": "Synapse: Force Autocomplete",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.selectFilesAsContext",
+        "category": "Synapse",
+        "title": "Select Files as Context",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.newSession",
+        "category": "Synapse",
+        "title": "New Session",
+        "icon": "$(add)",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.viewHistory",
+        "category": "Synapse",
+        "title": "View History",
+        "icon": "$(history)",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.viewLogs",
+        "category": "Synapse",
+        "title": "View History",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.clearConsole",
+        "category": "Synapse",
+        "title": "Clear Console",
+        "icon": "$(clear-all)",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.navigateTo",
+        "category": "Synapse",
+        "title": "Navigate to a path",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.writeCommentsForCode",
+        "category": "Synapse",
+        "title": "Write Comments for this Code",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.writeDocstringForCode",
+        "category": "Synapse",
+        "title": "Write a Docstring for this Code",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.fixCode",
+        "category": "Synapse",
+        "title": "Fix this Code",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.optimizeCode",
+        "category": "Synapse",
+        "title": "Optimize this Code",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.fixGrammar",
+        "category": "Synapse",
+        "title": "Fix Grammar / Spelling",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.codebaseForceReIndex",
+        "category": "Synapse",
+        "title": "Codebase Force Re-Index",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.rebuildCodebaseIndex",
+        "category": "Synapse",
+        "title": "Rebuild codebase index",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.docsIndex",
+        "category": "Synapse",
+        "title": "Docs Index",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.docsReIndex",
+        "category": "Synapse",
+        "title": "Docs Force Re-Index",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.focusSynapseInput",
+        "category": "Synapse",
+        "title": "Focus Synapse Chat",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.enterEnterpriseLicenseKey",
+        "category": "Synapse",
+        "title": "Enter Enterprise License Key",
+        "group": "Synapse"
+      },
+      {
+        "command": "synapse.nextEditWindow.hideNextEditSuggestion",
+        "category": "Synapse",
+        "title": "Hide Next Edit Suggestion"
+      },
+      {
+        "command": "synapse.nextEditWindow.acceptNextEditSuggestion",
+        "category": "Synapse",
+        "title": "Accept Next Edit Suggestion"
+      },
+      {
+        "command": "synapse.forceNextEdit",
+        "title": "Synapse: Force Next Edit"
+      },
+      {
+        "command": "synapse.acceptJump",
+        "category": "Synapse",
+        "title": "Synapse: Accept Jump Suggestion"
+      },
+      {
+        "command": "synapse.rejectJump",
+        "category": "Synapse",
+        "title": "Synapse: Reject Jump Suggestion"
+      },
+      {
+        "command": "synapse.generateRule",
+        "category": "Synapse",
+        "title": "Generate Rule",
+        "group": "Synapse"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "synapse.focusSynapseInput",
+        "mac": "cmd+l",
+        "key": "ctrl+l"
+      },
+      {
+        "command": "synapse.focusSynapseInputWithoutClear",
+        "mac": "cmd+shift+l",
+        "key": "ctrl+shift+l"
+      },
+      {
+        "command": "synapse.acceptDiff",
+        "mac": "shift+cmd+enter",
+        "key": "shift+ctrl+enter",
+        "when": "synapse.diffVisible"
+      },
+      {
+        "command": "synapse.rejectDiff",
+        "mac": "shift+cmd+backspace",
+        "key": "shift+ctrl+backspace",
+        "when": "synapse.diffVisible"
+      },
+      {
+        "command": "synapse.rejectDiff",
+        "mac": "cmd+z",
+        "key": "ctrl+z",
+        "when": "synapse.diffVisible"
+      },
+      {
+        "command": "synapse.quickEditHistoryUp",
+        "mac": "up",
+        "key": "up",
+        "when": "false && synapse.quickEditHistoryFocused"
+      },
+      {
+        "command": "synapse.quickEditHistoryDown",
+        "mac": "down",
+        "key": "down",
+        "when": "false && synapse.quickEditHistoryFocused"
+      },
+      {
+        "command": "synapse.acceptVerticalDiffBlock",
+        "mac": "alt+cmd+y",
+        "key": "alt+ctrl+y"
+      },
+      {
+        "command": "synapse.rejectVerticalDiffBlock",
+        "mac": "alt+cmd+n",
+        "key": "alt+ctrl+n"
+      },
+      {
+        "command": "synapse.focusEdit",
+        "title": "Edit code with natural language",
+        "mac": "cmd+i",
+        "key": "ctrl+i"
+      },
+      {
+        "command": "synapse.exitEditMode",
+        "mac": "escape",
+        "key": "escape",
+        "when": "synapse.inEditMode && editorFocus"
+      },
+      {
+        "command": "synapse.debugTerminal",
+        "mac": "cmd+shift+r",
+        "key": "ctrl+shift+r"
+      },
+      {
+        "command": "synapse.toggleFullScreen",
+        "mac": "cmd+k cmd+m",
+        "key": "ctrl+k ctrl+m",
+        "when": "!terminalFocus"
+      },
+      {
+        "command": "synapse.toggleTabAutocompleteEnabled",
+        "mac": "cmd+k cmd+a",
+        "key": "ctrl+k ctrl+a",
+        "when": "!terminalFocus"
+      },
+      {
+        "command": "synapse.forceAutocomplete",
+        "key": "ctrl+alt+space",
+        "mac": "cmd+alt+space",
+        "when": "editorTextFocus && !editorHasSelection && !editorReadOnly && !inSnippetMode"
+      },
+      {
+        "command": "synapse.applyCodeFromChat",
+        "mac": "alt+a",
+        "key": "alt+a"
+      },
+      {
+        "command": "synapse.nextEditWindow.hideNextEditSuggestion",
+        "key": "escape",
+        "when": "editorTextFocus && nextEditWindowActive && !synapse.jumpDecorationVisible"
+      },
+      {
+        "command": "synapse.nextEditWindow.acceptNextEditSuggestion",
+        "key": "tab",
+        "when": "editorTextFocus && nextEditWindowActive && !synapse.jumpDecorationVisible"
+      },
+      {
+        "command": "synapse.acceptJump",
+        "key": "tab",
+        "when": "editorTextFocus && synapse.jumpDecorationVisible"
+      },
+      {
+        "command": "synapse.rejectJump",
+        "key": "escape",
+        "when": "editorTextFocus && synapse.jumpDecorationVisible"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "synapse.synapseSubMenu",
+        "label": "Synapse"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "synapse.focusSynapseInput"
+        },
+        {
+          "command": "synapse.focusSynapseInputWithoutClear"
+        },
+        {
+          "command": "synapse.debugTerminal"
+        },
+        {
+          "command": "synapse.toggleFullScreen"
+        },
+        {
+          "command": "synapse.newSession"
+        },
+        {
+          "command": "synapse.enterEnterpriseLicenseKey"
+        },
+        {
+          "command": "synapse.generateRule"
+        }
+      ],
+      "editor/context": [
+        {
+          "submenu": "synapse.synapseSubMenu",
+          "group": "0_asynapse"
+        }
+      ],
+      "editor/title/run": [
+        {
+          "command": "synapse.rejectDiff",
+          "group": "Synapse",
+          "when": "synapse.streamingDiff"
+        }
+      ],
+      "synapse.synapseSubMenu": [
+        {
+          "command": "synapse.focusSynapseInputWithoutClear",
+          "group": "Synapse",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "synapse.focusEdit",
+          "group": "Synapse",
+          "when": "editorHasSelection && !editorReadonly"
+        },
+        {
+          "command": "synapse.writeCommentsForCode",
+          "group": "Synapse",
+          "when": "editorHasSelection && !editorReadonly"
+        },
+        {
+          "command": "synapse.writeDocstringForCode",
+          "group": "Synapse",
+          "when": "editorHasSelection && !editorReadonly"
+        },
+        {
+          "command": "synapse.fixCode",
+          "group": "Synapse",
+          "when": "editorHasSelection && !editorReadonly"
+        },
+        {
+          "command": "synapse.optimizeCode",
+          "group": "Synapse",
+          "when": "editorHasSelection && !editorReadonly"
+        },
+        {
+          "command": "synapse.fixGrammar",
+          "group": "Synapse",
+          "when": "editorHasSelection && editorLangId == 'markdown' && !editorReadonly"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "synapse.selectFilesAsContext",
+          "group": "1_debug@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "synapse.newSession",
+          "group": "navigation@1",
+          "when": "view == synapse.synapseGUIView"
+        },
+        {
+          "command": "synapse.viewHistory",
+          "group": "navigation@2",
+          "when": "view == synapse.synapseGUIView"
+        },
+        {
+          "command": "synapse.toggleFullScreen",
+          "group": "navigation@3",
+          "when": "view == synapse.synapseGUIView"
+        },
+        {
+          "command": "synapse.openConfigPage",
+          "group": "navigation@4",
+          "when": "view == synapse.synapseGUIView"
+        },
+        {
+          "command": "synapse.clearConsole",
+          "group": "navigation@1",
+          "when": "view == synapse.synapseConsoleView"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "synapse.newSession",
+          "group": "navigation@1",
+          "when": "activeWebviewPanelId == synapse.synapseGUIView"
+        },
+        {
+          "command": "synapse.viewHistory",
+          "group": "navigation@2",
+          "when": "activeWebviewPanelId == synapse.synapseGUIView"
+        }
+      ],
+      "terminal/context": [
+        {
+          "command": "synapse.debugTerminal",
+          "group": "navigation@top"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "synapse",
+          "title": "Synapse",
+          "icon": "media/sidebar-icon.png"
+        }
+      ],
+      "panel": [
+        {
+          "id": "synapseConsole",
+          "title": "Synapse Console",
+          "icon": "$(window)"
+        }
+      ]
+    },
+    "views": {
+      "synapse": [
+        {
+          "type": "webview",
+          "id": "synapse.synapseGUIView",
+          "name": "Synapse",
+          "icon": "media/sidebar-icon.png",
+          "visibility": "visible"
+        }
+      ],
+      "synapseConsole": [
+        {
+          "type": "webview",
+          "id": "synapse.synapseConsoleView",
+          "name": "Synapse Console",
+          "icon": "$(window)",
+          "visibility": "visible",
+          "when": "config.synapse.enableConsole"
+        }
+      ]
+    },
+    "jsonValidation": [
+      {
+        "fileMatch": "**/.synapse*/config.json",
+        "url": "./config_schema.json"
+      },
+      {
+        "fileMatch": ".synapserc.json",
+        "url": "./synapse_rc_schema.json"
+      },
+      {
+        "fileMatch": "**/config.yaml",
+        "url": "./config-yaml-schema.json"
+      }
+    ]
+  },
+  "scripts": {
+    "esbuild-base": "node scripts/esbuild.js",
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "esbuild-notify": "npm run esbuild-base -- --sourcemap --notify",
+    "esbuild:visualize": "esbuild-visualizer --metadata ./build/meta.json --filename ./build/stats.html --open",
+    "tsc": "tsc -p ./",
+    "tsc:check": "tsc -p ./ --noEmit",
+    "tsc-watch": "tsc -watch -p ./",
+    "rebuild": "electron-rebuild -v 19.1.8 node-pty",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint . --ext ts --fix",
+    "test": "vitest run",
+    "vitest": "vitest run",
+    "write-build-timestamp": "node scripts/write-build-timestamp.js",
+    "prepackage": "node scripts/prepackage.js",
+    "package": "node scripts/package.js",
+    "package-all": "node scripts/package-all.js",
+    "package:pre-release": "node scripts/package.js --pre-release",
+    "build:rust": "cargo-cp-artifact -ac sync sync.node -- cargo build --manifest-path ../../sync/Cargo.toml --message-format=json-render-diagnostics",
+    "build-debug:rust": "npm run build:rust --",
+    "build-release:rust": "npm run build:rust -- --release",
+    "e2e:compile": "tsc -p ./tsconfig.e2e.json",
+    "e2e:build": "npm --prefix ../../gui run build && npm run package",
+    "e2e:create-storage": "mkdir -p ./e2e/storage",
+    "e2e:get-chromedriver": "extest get-chromedriver --storage ./e2e/storage --code_version 1.95.0",
+    "e2e:get-vscode": "extest get-vscode --storage ./e2e/storage --code_version 1.95.0",
+    "e2e:sign-vscode": "codesign --entitlements entitlements.plist --deep --force -s - './e2e/storage/Visual Studio Code.app'",
+    "e2e:copy-vsix": "chmod +x ./e2e/get-latest-vsix.sh && bash ./e2e/get-latest-vsix.sh",
+    "e2e:install-vsix": "extest install-vsix -f ./e2e/vsix/synapse.vsix --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage",
+    "e2e:install-extensions": "extest install-from-marketplace ms-vscode-remote.remote-ssh --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage && extest install-from-marketplace ms-vscode-remote.remote-containers --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage && extest install-from-marketplace ms-vscode-remote.remote-wsl --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage",
+    "e2e:test": "extest run-tests ${TEST_FILE:-'./e2e/_output/tests/*.test.js'} --code_settings settings.json --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage",
+    "e2e:clean": "rm -rf ./e2e/_output ./e2e/storage",
+    "e2e:all": "npm run e2e:build && npm run e2e:compile && npm run e2e:create-storage && npm run e2e:get-chromedriver && npm run e2e:get-vscode && npm run e2e:sign-vscode && npm run e2e:copy-vsix && npm run e2e:install-vsix && npm run e2e:install-extensions && SYNAPSE_GLOBAL_DIR=e2e/test-synapse npm run e2e:test && npm run e2e:clean",
+    "e2e:all-non-mac": "npm run e2e:build && npm run e2e:compile && npm run e2e:create-storage && npm run e2e:get-chromedriver && npm run e2e:get-vscode && npm run e2e:copy-vsix && npm run e2e:install-vsix && npm run e2e:install-extensions && SYNAPSE_GLOBAL_DIR=e2e/test-synapse npm run e2e:test && npm run e2e:clean",
+    "e2e:recompile-extension": "npm run package && npm run e2e:compile && npm run e2e:copy-vsix && npm run e2e:install-vsix && npm run e2e:install-extensions && SYNAPSE_GLOBAL_DIR=e2e/test-synapse npm run e2e:test && npm run e2e:clean",
+    "e2e:rebuild-gui": "rm -rf gui && cp -r ../../gui/dist gui && npm run package && npm run e2e:copy-vsix && npm run e2e:install-vsix && npm run e2e:install-extensions && SYNAPSE_GLOBAL_DIR=e2e/test-synapse npm run e2e:test && npm run e2e:clean",
+    "e2e:quick": "npm run e2e:compile && SYNAPSE_GLOBAL_DIR=e2e/test-synapse npm run e2e:test && npm run e2e:clean",
+    "e2e:ci:download": "npm run e2e:create-storage && npm run e2e:get-chromedriver && npm run e2e:get-vscode",
+    "e2e:ci:run": "npm run e2e:compile && npm run e2e:copy-vsix && npm run e2e:install-vsix && npm run e2e:install-extensions && SYNAPSE_GLOBAL_DIR=e2e/test-synapse npm run e2e:test",
+    "e2e:ci:run-yaml": "npm run e2e:compile && npm run e2e:copy-vsix && npm run e2e:install-vsix && npm run e2e:install-extensions && SYNAPSE_GLOBAL_DIR=e2e/test-synapse-yaml npm run e2e:test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.6.4",
+    "@nestjs/common": "^11.0.16",
+    "@openapitools/openapi-generator-cli": "^2.20.0",
+    "@types/chai": "^5.0.1",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/follow-redirects": "^1.14.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "16.x",
+    "@types/node-fetch": "^2.6.12",
+    "@types/react-dom": "^18.2.4",
+    "@types/request": "^2.48.8",
+    "@types/uuid": "^10.0.0",
+    "@types/vscode": "1.70",
+    "@types/ws": "^8.5.4",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@vscode/vsce": "^2.22.0",
+    "cargo-cp-artifact": "^0.1",
+    "chai": "^4.5.0",
+    "esbuild": "0.17.19",
+    "esbuild-visualizer": "^0.6.0",
+    "eslint": "^8.28.0",
+    "json-schema-to-typescript": "^12.0.0",
+    "ovsx": "^0.8.3",
+    "rimraf": "^5.0.10",
+    "typescript": "^5.6.3",
+    "vite": "^4.5.14",
+    "vscode-extension-tester": "^8.14.1"
+  },
+  "dependencies": {
+    "@electron/rebuild": "^3.2.10",
+    "@reduxjs/toolkit": "^1.9.3",
+    "@synapse/config-types": "file:../../packages/config-types",
+    "@synapse/config-yaml": "file:../../packages/config-yaml",
+    "@synapse/fetch": "file:../../packages/fetch",
+    "@synapse/llm-info": "file:../../packages/llm-info",
+    "@synapse/openai-adapters": "file:../../packages/openai-adapters",
+    "@vscode/ripgrep": "^1.15.9",
+    "axios": "^1.2.5",
+    "core": "file:../../core",
+    "cors": "^2.8.5",
+    "dbinfoz": "^0.14.0",
+    "diff": "^7.0.0",
+    "downshift": "^7.6.0",
+    "esbuild": "0.17.19",
+    "express": "^4.18.2",
+    "fkill": "^8.1.0",
+    "follow-redirects": "^1.15.4",
+    "handlebars": "^4.7.8",
+    "highlight.js": "^11.7.0",
+    "highlightable": "^1.3.0-beta.0",
+    "http-proxy": "^1.18.1",
+    "http-proxy-agent": "^7.0.0",
+    "http-proxy-middleware": "^2.0.9",
+    "https-proxy-agent": "^7.0.2",
+    "ignore": "^5.3.0",
+    "jsdom": "^24.0.0",
+    "lru-cache": "^11.0.2",
+    "minisearch": "^7.0.0",
+    "mocha": "^11.7.1",
+    "monaco-editor": "^0.45.0",
+    "monaco-vscode-textmate-theme-converter": "^0.1.7",
+    "ncp": "^2.0.0",
+    "node-fetch": "^3.3.2",
+    "node-machine-id": "^1.1.12",
+    "posthog-node": "^3.6.3",
+    "react-markdown": "^8.0.7",
+    "react-redux": "^8.0.5",
+    "read-last-lines": "^1.8.0",
+    "request": "^2.88.2",
+    "socket.io-client": "^4.7.2",
+    "strip-ansi": "^7.1.0",
+    "svg-builder": "^2.0.0",
+    "systeminformation": "^5.23.7",
+    "tailwindcss": "^3.3.2",
+    "undici": "^6.21.3",
+    "uuid": "^9.0.1",
+    "uuidv4": "^6.2.13",
+    "vectordb": "^0.4.20",
+    "vitest": "^3.1.4",
+    "vscode-languageclient": "^8.0.2",
+    "ws": "^8.13.0",
+    "yarn": "^1.22.21"
+  },
+  "overrides": {
+    "vitest": {
+      "@types/node": "^16.18.119"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  synapse-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: synapse-development
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/core/node_modules
+      - /app/extensions/vscode/node_modules
+      - /app/extensions/intellij/node_modules
+      - /app/gui/node_modules
+      - /app/docs/node_modules
+      - /app/packages/*/node_modules
+      - /app/binary/node_modules
+      - /app/scripts/node_modules
+    ports:
+      - "3000:3000" # GUI
+      - "3001:3001" # Core dev server
+      - "3002:3002" # Docs
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
+    working_dir: /app

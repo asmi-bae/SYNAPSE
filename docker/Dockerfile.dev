@@ -1,0 +1,39 @@
+# Development Dockerfile for Synapse
+FROM node:20.19.0-alpine
+
+# Install pnpm globally
+RUN npm install -g pnpm@latest
+
+# Install system dependencies for native modules
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    bash
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json pnpm-workspace.yaml ./
+COPY core/package.json ./core/
+COPY extensions/vscode/package.json ./extensions/vscode/
+COPY extensions/intellij/package.json ./extensions/intellij/
+COPY gui/package.json ./gui/
+COPY docs/package.json ./docs/
+COPY packages/*/package.json ./packages/
+COPY binary/package.json ./binary/
+COPY scripts/package.json ./scripts/
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Expose ports for development servers
+EXPOSE 3000 3001 3002
+
+# Default command
+CMD ["pnpm", "dev"]

@@ -1,0 +1,8 @@
+packages:
+  - "core"
+  - "extensions/*"
+  - "gui"
+  - "docs"
+  - "packages/*"
+  - "binary"
+  - "scripts"
